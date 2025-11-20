@@ -216,6 +216,5 @@ class ArtistService {
     }
   }
 }
-}
 
 export default new ArtistService();

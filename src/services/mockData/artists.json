@@ -1,0 +1,50 @@
+[
+  {
+    "Id": 1,
+    "name": "Luna Rose",
+    "image": "https://images.unsplash.com/photo-1494790108755-2616c04be44e?w=400&h=400&fit=crop&crop=center",
+    "bio": "Luna Rose creates ethereal soundscapes that transport listeners to cosmic realms. With her signature blend of ambient textures and melodic vocals, she has become a leading voice in the space-ambient genre.",
+    "albums": [1],
+    "topTracks": [1, 7]
+  },
+  {
+    "Id": 2,
+    "name": "Neon Waves",
+    "image": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&h=400&fit=crop&crop=center",
+    "bio": "Neon Waves is an electronic music producer known for creating immersive digital soundscapes. Their music combines retro-futuristic elements with modern production techniques.",
+    "albums": [2],
+    "topTracks": [2, 8]
+  },
+  {
+    "Id": 3,
+    "name": "Marina Blue",
+    "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=center",
+    "bio": "Marina Blue's music flows like ocean currents, deep and mesmerizing. Her compositions draw inspiration from the natural rhythms of water and tidal movements.",
+    "albums": [3],
+    "topTracks": [3, 15]
+  },
+  {
+    "Id": 4,
+    "name": "Golden Hour",
+    "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=center",
+    "bio": "Golden Hour captures the warm, nostalgic feeling of California sunsets in their music. Their indie-pop sound is perfect for road trips and summer evenings.",
+    "albums": [4],
+    "topTracks": [4]
+  },
+  {
+    "Id": 5,
+    "name": "Cosmic Orchestra",
+    "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=center",
+    "bio": "Cosmic Orchestra is a collective of musicians creating expansive orchestral pieces inspired by the vastness of space. Their compositions blend classical instruments with cosmic themes.",
+    "albums": [5],
+    "topTracks": [5, 13]
+  },
+  {
+    "Id": 6,
+    "name": "Storm Riders",
+    "image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=center",
+    "bio": "Storm Riders harnesses the raw power of nature in their music. Their tracks feature thunderous rhythms and electrifying energy that captures the intensity of storms.",
+    "albums": [6],
+    "topTracks": [9, 14]
+  }
+]

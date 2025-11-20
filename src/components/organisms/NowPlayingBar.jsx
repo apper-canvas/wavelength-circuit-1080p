@@ -48,8 +48,8 @@ const NowPlayingBar = ({
           {/* Track Info */}
           <div className="flex items-center gap-4 w-80 min-w-0">
             <img 
-              src={currentTrack.albumArt} 
-              alt={currentTrack.album}
+src={currentTrack.albumArt_c?.url || currentTrack.albumArt || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center"} 
+              alt={currentTrack.album_c || currentTrack.album}
               className="w-14 h-14 rounded-lg object-cover shadow-lg cursor-pointer hover:scale-105 transition-transform duration-200"
               onClick={handleTrackClick}
             />
@@ -58,10 +58,10 @@ const NowPlayingBar = ({
                 className="font-medium text-white truncate cursor-pointer hover:text-primary transition-colors duration-200"
                 onClick={handleTrackClick}
               >
-                {currentTrack.title}
+{currentTrack.title_c || currentTrack.title}
               </h3>
-              <p className="text-sm text-gray-400 truncate">
-                {currentTrack.artist}
+              <p className="text-xs text-gray-400 truncate">
+                {currentTrack.artist_c || currentTrack.artist}
               </p>
             </div>
             <Button
@@ -74,7 +74,7 @@ const NowPlayingBar = ({
                 name="Heart" 
                 className={cn(
                   "h-4 w-4",
-                  currentTrack.isLiked && "fill-current text-red-400"
+(currentTrack.isLiked_c || currentTrack.isLiked) && "fill-current text-red-400"
                 )} 
               />
             </Button>
@@ -152,15 +152,16 @@ const NowPlayingBar = ({
             onClick={handleExpandClick}
           >
             <img 
-              src={currentTrack.albumArt} 
-              alt={currentTrack.album}
+src={currentTrack.albumArt_c?.url || currentTrack.albumArt || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center"} 
+              alt={currentTrack.album_c || currentTrack.album}
               className="w-12 h-12 rounded-lg object-cover shadow-lg"
             />
             <div className="min-w-0 flex-1">
-              <h3 className="font-medium text-white truncate text-sm">
-                {currentTrack.title}
+<h3 className="font-medium text-white truncate text-sm">
+                {currentTrack.title_c || currentTrack.title}
               </h3>
               <p className="text-xs text-gray-400 truncate">
+                {currentTrack.artist_c || currentTrack.artist}
                 {currentTrack.artist}
               </p>
             </div>
@@ -177,7 +178,7 @@ const NowPlayingBar = ({
                 name="Heart" 
                 className={cn(
                   "h-5 w-5",
-                  currentTrack.isLiked && "fill-current text-red-400"
+(currentTrack.isLiked_c || currentTrack.isLiked) && "fill-current text-red-400"
                 )} 
               />
             </Button>

@@ -75,7 +75,7 @@ const Search = () => {
       const albumWithTracks = await albumService.getWithTracks(album.Id);
       if (albumWithTracks.trackDetails?.length > 0) {
         playTrack(albumWithTracks.trackDetails[0], albumWithTracks.trackDetails);
-        toast.success(`Playing "${album.title}"`);
+toast.success(`Playing "${album.title_c || album.title}"`);
       }
     } catch (err) {
       toast.error("Failed to play album");
@@ -103,7 +103,7 @@ const Search = () => {
           track.Id === trackId ? updatedTrack : track
         )
       }));
-      toast.success(updatedTrack.isLiked ? "Added to Liked Songs" : "Removed from Liked Songs");
+toast.success((updatedTrack.isLiked_c || updatedTrack.isLiked) ? "Added to Liked Songs" : "Removed from Liked Songs");
     } catch (err) {
       toast.error("Failed to update liked status");
     }
@@ -244,13 +244,13 @@ const Search = () => {
                     >
                       <div className="aspect-square mb-4 overflow-hidden rounded-full mx-auto max-w-[120px]">
                         <img 
-                          src={artist.image} 
-                          alt={artist.name}
+src={artist.image_c?.url || artist.image || "https://images.unsplash.com/photo-1494790108755-2616c04be44e?w=400&h=400&fit=crop&crop=center"} 
+                          alt={artist.Name || artist.name}
                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                         />
                       </div>
                       <h3 className="font-display font-semibold text-white text-lg mb-2 truncate group-hover:text-yellow-400 transition-colors duration-300">
-                        {artist.name}
+                        {artist.Name || artist.name}
                       </h3>
                       <p className="text-gray-400 text-sm">Artist</p>
                     </div>

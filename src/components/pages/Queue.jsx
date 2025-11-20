@@ -42,7 +42,7 @@ const Queue = () => {
   ]);
 
   const handlePlayTrack = (track) => {
-    toast.success(`Playing "${track.title}"`);
+toast.success(`Playing "${track.title_c || track.title}"`);
   };
 
   const handleToggleLike = (trackId) => {
@@ -69,7 +69,7 @@ const Queue = () => {
     return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
   };
 
-  const totalDuration = queue.reduce((sum, track) => sum + track.duration, 0);
+const totalDuration = queue.reduce((sum, track) => sum + (track.duration_c || track.duration), 0);
 
   return (
     <div className="h-full overflow-y-auto bg-gradient-to-br from-dark via-surface/20 to-dark">

@@ -39,9 +39,9 @@ const AlbumCard = ({
     >
       {/* Album Art */}
       <div className="relative aspect-square mb-4 overflow-hidden rounded-xl">
-        <img 
-          src={album.coverArt} 
-          alt={album.title}
+<img 
+          src={album.coverArt_c?.url || album.coverArt || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center"} 
+          alt={album.title_c || album.title}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
         />
         
@@ -63,15 +63,15 @@ const AlbumCard = ({
 
       {/* Album Info */}
       <div className="space-y-1">
-        <h3 className="font-display font-semibold text-white text-lg leading-tight truncate group-hover:text-primary transition-colors duration-300">
-          {album.title}
+<h3 className="font-display font-semibold text-white text-lg leading-tight truncate group-hover:text-primary transition-colors duration-300">
+          {album.title_c || album.title}
         </h3>
         <p className="text-gray-400 text-sm truncate hover:text-gray-300 transition-colors duration-200">
-          {album.artist}
+          {album.artist_c || album.artist}
         </p>
-        {album.releaseYear && (
+        {(album.releaseYear_c || album.releaseYear) && (
           <p className="text-gray-500 text-xs">
-            {album.releaseYear}
+            {album.releaseYear_c || album.releaseYear}
           </p>
         )}
       </div>

@@ -38,7 +38,7 @@ const Playlists = () => {
       const playlistWithTracks = await playlistService.getWithTracks(playlist.Id);
       if (playlistWithTracks.trackDetails?.length > 0) {
         playTrack(playlistWithTracks.trackDetails[0], playlistWithTracks.trackDetails);
-        toast.success(`Playing "${playlist.name}"`);
+toast.success(`Playing "${playlist.Name || playlist.name}"`);
       } else {
         toast.info("This playlist is empty");
       }
@@ -56,7 +56,7 @@ const Playlists = () => {
   };
 
   const handleDeletePlaylist = async (playlist) => {
-    if (window.confirm(`Are you sure you want to delete "${playlist.name}"?`)) {
+if (window.confirm(`Are you sure you want to delete "${playlist.Name || playlist.name}"?`)) {
       try {
         await playlistService.delete(playlist.Id);
         setPlaylists(prev => prev.filter(p => p.Id !== playlist.Id));

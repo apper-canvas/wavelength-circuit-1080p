@@ -52,7 +52,7 @@ const Home = () => {
       const albumWithTracks = await albumService.getWithTracks(album.Id);
       if (albumWithTracks.trackDetails?.length > 0) {
         playTrack(albumWithTracks.trackDetails[0], albumWithTracks.trackDetails);
-        toast.success(`Playing "${album.title}"`);
+toast.success(`Playing "${album.title_c || album.title}"`);
       }
     } catch (err) {
       toast.error("Failed to play album");
@@ -63,7 +63,9 @@ const Home = () => {
     try {
       const playlistWithTracks = await playlistService.getWithTracks(playlist.Id);
       if (playlistWithTracks.trackDetails?.length > 0) {
-        playTrack(playlistWithTracks.trackDetails[0], playlistWithTracks.trackDetails);
+if (playlistWithTracks.trackDetails?.length > 0) {
+          playTrack(playlistWithTracks.trackDetails[0], playlistWithTracks.trackDetails);
+        }
         toast.success(`Playing "${playlist.name}"`);
       }
     } catch (err) {

@@ -1,10 +1,11 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "@/components/organisms/Sidebar";
-import MobileNavigation from "@/components/organisms/MobileNavigation";
-import NowPlayingBar from "@/components/organisms/NowPlayingBar";
+import toast from "react-hot-toast";
 import usePlayer from "@/hooks/usePlayer";
 import trackService from "@/services/api/trackService";
+import MobileNavigation from "@/components/organisms/MobileNavigation";
+import NowPlayingBar from "@/components/organisms/NowPlayingBar";
+import Sidebar from "@/components/organisms/Sidebar";
 
 const Layout = () => {
   const {
@@ -23,11 +24,12 @@ const Layout = () => {
   } = usePlayer();
 
   const handleToggleLike = async (trackId) => {
-    try {
+try {
       await trackService.toggleLike(trackId);
       // In a real app, you'd update the current track state here
     } catch (error) {
       console.error("Failed to toggle like:", error);
+      toast.error("Failed to update liked status");
     }
   };
 

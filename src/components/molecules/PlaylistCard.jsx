@@ -51,8 +51,8 @@ const PlaylistCard = ({
       {/* Playlist Cover */}
       <div className="relative aspect-square mb-4 overflow-hidden rounded-xl">
         <img 
-          src={playlist.coverImage} 
-          alt={playlist.name}
+src={playlist.coverImage_c?.url || playlist.coverImage || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center"} 
+          alt={playlist.Name || playlist.name}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
         />
         
@@ -74,7 +74,7 @@ const PlaylistCard = ({
         {/* Track Count Badge */}
         <div className="absolute top-2 left-2 bg-dark/80 backdrop-blur-sm px-2 py-1 rounded-full">
           <span className="text-xs text-white font-medium">
-            {playlist.tracks?.length || 0} tracks
+{playlist.trackIds_c || playlist.tracks?.length || 0} tracks
           </span>
         </div>
       </div>
@@ -82,16 +82,16 @@ const PlaylistCard = ({
       {/* Playlist Info */}
       <div className="space-y-1">
         <h3 className="font-display font-semibold text-white text-lg leading-tight truncate group-hover:text-accent transition-colors duration-300">
-          {playlist.name}
+{playlist.Name || playlist.name}
         </h3>
-        {playlist.description && (
+{(playlist.description_c || playlist.description) && (
           <p className="text-gray-400 text-sm line-clamp-2 leading-tight">
-            {playlist.description}
+            {playlist.description_c || playlist.description}
           </p>
         )}
-        {playlist.duration > 0 && (
+{(playlist.duration_c || playlist.duration) > 0 && (
           <p className="text-gray-500 text-xs">
-            {formatDuration(playlist.duration)}
+            {formatDuration(playlist.duration_c || playlist.duration)}
           </p>
         )}
       </div>

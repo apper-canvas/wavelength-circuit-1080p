@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react'
+import { useAuth } from '@/layouts/Root'
 import { NavLink, useLocation } from "react-router-dom";
 import { cn } from "@/utils/cn";
 import ApperIcon from "@/components/ApperIcon";

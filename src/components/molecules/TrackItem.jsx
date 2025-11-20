@@ -57,24 +57,24 @@ const TrackItem = ({
       {/* Track Info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-3">
-          {track.albumArt && (
+{(track.albumArt_c || track.albumArt) && (
             <img 
-              src={track.albumArt} 
-              alt={track.album}
-              className="w-12 h-12 rounded-lg object-cover shadow-lg"
+              src={track.albumArt_c?.url || track.albumArt || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center"} 
+              alt={track.album_c || track.album}
+              className="w-10 h-10 rounded object-cover"
             />
           )}
-          <div className="min-w-0 flex-1">
+<div className="min-w-0 flex-1">
             <h3 className={cn(
               "font-medium text-white truncate",
               isActive && "text-primary"
             )}>
-              {track.title}
+              {track.title_c || track.title}
             </h3>
             {showArtist && (
-              <p className="text-sm text-gray-400 truncate hover:text-gray-300 transition-colors">
-                {track.artist}
-              </p>
+              <div className="text-gray-400 text-sm truncate">
+                {track.artist_c || track.artist}
+              </div>
             )}
           </div>
         </div>
@@ -84,7 +84,7 @@ const TrackItem = ({
       {showAlbum && (
         <div className="hidden md:block w-48 flex-shrink-0">
           <p className="text-sm text-gray-400 truncate hover:text-gray-300 transition-colors">
-            {track.album}
+{track.album_c || track.album}
           </p>
         </div>
       )}
@@ -101,8 +101,8 @@ const TrackItem = ({
           className="text-gray-400 hover:text-red-400"
         >
           <ApperIcon 
-            name={track.isLiked ? "Heart" : "Heart"} 
-            className={cn("h-4 w-4", track.isLiked && "fill-current text-red-400")} 
+name={(track.isLiked_c || track.isLiked) ? "Heart" : "Heart"} 
+            className={cn("h-4 w-4", (track.isLiked_c || track.isLiked) && "fill-current text-red-400")}
           />
         </Button>
 
@@ -135,7 +135,7 @@ const TrackItem = ({
       {showDuration && (
         <div className="w-16 text-right flex-shrink-0">
           <span className="text-sm text-gray-400">
-            {formatDuration(track.duration)}
+{formatDuration(track.duration_c || track.duration)}
           </span>
         </div>
       )}

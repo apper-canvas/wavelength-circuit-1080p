@@ -1,28 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import playlistService from "@/services/api/playlistService";
+import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
-import ApperIcon from "@/components/ApperIcon";
-import playlistService from "@/services/api/playlistService";
 
 const CreatePlaylist = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     name: "",
-    description: "",
-    coverImage: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center"
+    description: ""
   });
   const [loading, setLoading] = useState(false);
 
-  const coverImageOptions = [
-    "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center",
-    "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=400&h=400&fit=crop&crop=center",
-    "https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=400&h=400&fit=crop&crop=center",
-    "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop&crop=center",
-    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center",
-    "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=400&fit=crop&crop=center"
-  ];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -78,39 +69,7 @@ const CreatePlaylist = () => {
 
         {/* Form */}
         <div className="max-w-2xl">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Cover Image Selection */}
-            <div>
-              <label className="block text-lg font-medium text-white mb-4">
-                Choose Cover Image
-              </label>
-              <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-                {coverImageOptions.map((imageUrl, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    onClick={() => setFormData(prev => ({ ...prev, coverImage: imageUrl }))}
-                    className={`relative aspect-square rounded-xl overflow-hidden transition-all duration-300 hover:scale-105 ${
-                      formData.coverImage === imageUrl 
-                        ? "ring-4 ring-primary shadow-xl shadow-primary/30" 
-                        : "hover:ring-2 hover:ring-gray-400"
-                    }`}
-                  >
-                    <img 
-                      src={imageUrl} 
-                      alt={`Cover option ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                    {formData.coverImage === imageUrl && (
-                      <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
-                        <ApperIcon name="Check" className="h-8 w-8 text-white" />
-                      </div>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-
+<form onSubmit={handleSubmit} className="space-y-8">
             {/* Playlist Name */}
             <div>
               <label htmlFor="name" className="block text-lg font-medium text-white mb-3">
@@ -147,11 +106,9 @@ const CreatePlaylist = () => {
             <div className="bg-gradient-to-r from-surface/50 to-gray-700/30 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50">
               <h3 className="text-lg font-semibold text-white mb-4">Preview</h3>
               <div className="flex items-center gap-4">
-                <img 
-                  src={formData.coverImage} 
-                  alt="Playlist cover"
-                  className="w-20 h-20 rounded-xl object-cover shadow-lg"
-                />
+                <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                  <ApperIcon name="Music" className="h-8 w-8 text-primary" />
+                </div>
                 <div>
                   <h4 className="text-xl font-display font-bold text-white">
                     {formData.name || "Untitled Playlist"}
@@ -178,12 +135,20 @@ const CreatePlaylist = () => {
               </Button>
               <Button
                 type="submit"
-                variant="primary"
-                loading={loading}
-                icon="Plus"
-                className="flex-1 bg-gradient-to-r from-primary to-accent"
+                disabled={loading || !formData.name.trim()}
+                className="flex-1 bg-gradient-to-r from-primary to-secondary"
               >
-                Create Playlist
+                {loading ? (
+                  <>
+                    <ApperIcon name="Loader2" className="mr-2 h-4 w-4 animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  <>
+                    <ApperIcon name="Plus" className="mr-2 h-4 w-4" />
+                    Create Playlist
+                  </>
+                )}
               </Button>
             </div>
           </form>

@@ -38,21 +38,21 @@ const AlbumDetail = () => {
 
   const handlePlayAlbum = () => {
     if (album?.trackDetails?.length > 0) {
-      playTrack(album.trackDetails[0], album.trackDetails);
-      toast.success(`Playing "${album.title}"`);
+playTrack(album.trackDetails[0], album.trackDetails);
+      toast.success(`Playing "${album.title_c || album.title}"`);
     }
   };
 
   const handlePlayTrack = (track) => {
-    playTrack(track, album.trackDetails || []);
-    toast.success(`Playing "${track.title}"`);
+playTrack(track, album.trackDetails || []);
+    toast.success(`Playing "${track.title_c || track.title}"`);
   };
 
   const handleShufflePlay = () => {
     if (album?.trackDetails?.length > 0) {
       const shuffledTracks = [...album.trackDetails].sort(() => 0.5 - Math.random());
-      playTrack(shuffledTracks[0], shuffledTracks);
-      toast.success(`Shuffling "${album.title}"`);
+playTrack(shuffledTracks[0], shuffledTracks);
+      toast.success(`Shuffling "${album.title_c || album.title}"`);
     }
   };
 
@@ -65,14 +65,14 @@ const AlbumDetail = () => {
           track.Id === trackId ? updatedTrack : track
         ) || []
       }));
-      toast.success(updatedTrack.isLiked ? "Added to Liked Songs" : "Removed from Liked Songs");
+toast.success((updatedTrack.isLiked_c || updatedTrack.isLiked) ? "Added to Liked Songs" : "Removed from Liked Songs");
     } catch (err) {
       toast.error("Failed to update liked status");
     }
   };
 
   const handleAddToQueue = (track) => {
-    toast.success(`"${track.title}" added to queue`);
+toast.success(`"${track.title_c || track.title}" added to queue`);
   };
 
   const handleAddToPlaylist = (track) => {
@@ -93,7 +93,7 @@ const AlbumDetail = () => {
   if (error) return <ErrorView message={error} onRetry={loadAlbum} />;
   if (!album) return <ErrorView message="Album not found" />;
 
-  const totalDuration = album.trackDetails?.reduce((sum, track) => sum + track.duration, 0) || 0;
+const totalDuration = album.trackDetails?.reduce((sum, track) => sum + (track.duration_c || track.duration), 0) || 0;
   const trackCount = album.trackDetails?.length || 0;
 
   return (
@@ -115,8 +115,8 @@ const AlbumDetail = () => {
         <div className="flex flex-col md:flex-row gap-8 mb-8">
           <div className="flex-shrink-0">
             <img 
-              src={album.coverArt} 
-              alt={album.title}
+src={album.coverArt_c?.url || album.coverArt || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center"} 
+              alt={album.title_c || album.title}
               className="w-64 h-64 rounded-2xl object-cover shadow-2xl"
             />
           </div>
@@ -127,14 +127,14 @@ const AlbumDetail = () => {
                 Album
               </p>
               <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-4 break-words">
-                {album.title}
+{album.title_c || album.title}
               </h1>
-              <p className="text-2xl text-gray-300 font-medium mb-4">
-                {album.artist}
+              <p className="text-gray-300 text-xl mb-6 font-medium">
+                {album.artist_c || album.artist}
               </p>
               
-              <div className="flex items-center gap-2 text-gray-400">
-                <span>{album.releaseYear}</span>
+<div className="flex items-center gap-2 text-gray-400">
+                <span>{album.releaseYear_c || album.releaseYear}</span>
                 <span>•</span>
                 <span className="font-medium">{trackCount} song{trackCount !== 1 ? "s" : ""}</span>
                 {totalDuration > 0 && (

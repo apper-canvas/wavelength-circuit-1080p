@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { toast } from "react-toastify";
-import Button from "@/components/atoms/Button";
-import TrackItem from "@/components/molecules/TrackItem";
-import Loading from "@/components/ui/Loading";
-import ErrorView from "@/components/ui/ErrorView";
-import Empty from "@/components/ui/Empty";
 import trackService from "@/services/api/trackService";
 import ApperIcon from "@/components/ApperIcon";
+import TrackItem from "@/components/molecules/TrackItem";
+import Loading from "@/components/ui/Loading";
+import Empty from "@/components/ui/Empty";
+import ErrorView from "@/components/ui/ErrorView";
+import Button from "@/components/atoms/Button";
 
 const LikedSongs = () => {
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ const LikedSongs = () => {
     }
   };
 
-  const handleToggleLike = async (trackId) => {
+const handleToggleLike = async (trackId) => {
     try {
       const updatedTrack = await trackService.toggleLike(trackId);
       
@@ -62,6 +62,10 @@ const LikedSongs = () => {
         setLikedTracks(prev => prev.filter(track => track.Id !== trackId));
         toast.success("Removed from Liked Songs");
       } else {
+        // Update the track in current list
+        setLikedTracks(prev => prev.map(track => 
+          track.Id === trackId ? updatedTrack : track
+        ));
         toast.success("Added to Liked Songs");
       }
     } catch (err) {
@@ -90,7 +94,7 @@ const LikedSongs = () => {
   if (loading) return <Loading />;
   if (error) return <ErrorView message={error} onRetry={loadLikedTracks} />;
 
-  const totalDuration = likedTracks.reduce((sum, track) => sum + track.duration, 0);
+const totalDuration = likedTracks.reduce((sum, track) => sum + (track.duration_c || track.duration), 0);
 
   return (
     <div className="h-full overflow-y-auto bg-gradient-to-br from-dark via-surface/20 to-dark">

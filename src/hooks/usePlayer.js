@@ -91,7 +91,7 @@ const usePlayer = () => {
     };
   }, [playerState.isPlaying]);
 
-  const playTrack = useCallback((track, queue = [], startIndex = 0) => {
+const playTrack = useCallback((track, queue = [], startIndex = 0) => {
     if (!track) return;
 
     setPlayerState(prev => ({
@@ -104,7 +104,7 @@ const usePlayer = () => {
     }));
 
     if (audioRef.current) {
-      audioRef.current.src = track.audioUrl || "";
+      audioRef.current.src = track.audioUrl_c || track.audioUrl || "";
       audioRef.current.load();
       audioRef.current.play().catch(err => {
         console.error("Failed to play audio:", err);

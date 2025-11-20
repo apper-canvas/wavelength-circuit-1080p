@@ -1,0 +1,155 @@
+{
+  "/": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Homepage is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/login": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Login page is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/signup": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Signup page is public", 
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/search": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Search requires authentication",
+            "rule": "authenticated"
+          }
+        ]
+      },
+      "redirectOnDeny": "/login"
+    }
+  },
+  "/library": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Library requires authentication",
+            "rule": "authenticated"
+          }
+        ]
+      },
+      "redirectOnDeny": "/login"
+    }
+  },
+  "/playlists": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Playlists require authentication",
+            "rule": "authenticated"
+          }
+        ]
+      },
+      "redirectOnDeny": "/login"
+    }
+  },
+  "/playlists/*": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Playlist pages require authentication",
+            "rule": "authenticated"
+          }
+        ]
+      },
+      "redirectOnDeny": "/login"
+    }
+  },
+  "/playlist/:id": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Playlist detail requires authentication",
+            "rule": "authenticated"
+          }
+        ]
+      },
+      "redirectOnDeny": "/login"
+    }
+  },
+  "/album/:id": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Album detail requires authentication",
+            "rule": "authenticated"
+          }
+        ]
+      },
+      "redirectOnDeny": "/login"
+    }
+  },
+  "/liked": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Liked songs require authentication",
+            "rule": "authenticated"
+          }
+        ]
+      },
+      "redirectOnDeny": "/login"
+    }
+  },
+  "/now-playing": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Now playing requires authentication",
+            "rule": "authenticated"
+          }
+        ]
+      },
+      "redirectOnDeny": "/login"
+    }
+  },
+  "/queue": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Queue requires authentication",
+            "rule": "authenticated"
+          }
+        ]
+      },
+      "redirectOnDeny": "/login"
+    }
+  }
+}

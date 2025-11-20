@@ -40,7 +40,7 @@ const PlaylistDetail = () => {
   const handlePlayPlaylist = () => {
     if (playlist?.trackDetails?.length > 0) {
       playTrack(playlist.trackDetails[0], playlist.trackDetails);
-      toast.success(`Playing "${playlist.name}"`);
+toast.success(`Playing "${playlist.Name || playlist.name}"`);
     } else {
       toast.info("This playlist is empty");
     }
@@ -55,7 +55,7 @@ const PlaylistDetail = () => {
     if (playlist?.trackDetails?.length > 0) {
       const shuffledTracks = [...playlist.trackDetails].sort(() => 0.5 - Math.random());
       playTrack(shuffledTracks[0], shuffledTracks);
-      toast.success(`Shuffling "${playlist.name}"`);
+toast.success(`Shuffling "${playlist.Name || playlist.name}"`);
     } else {
       toast.info("This playlist is empty");
     }
@@ -70,7 +70,7 @@ const PlaylistDetail = () => {
           track.Id === trackId ? updatedTrack : track
         ) || []
       }));
-      toast.success(updatedTrack.isLiked ? "Added to Liked Songs" : "Removed from Liked Songs");
+toast.success((updatedTrack.isLiked_c || updatedTrack.isLiked) ? "Added to Liked Songs" : "Removed from Liked Songs");
     } catch (err) {
       toast.error("Failed to update liked status");
     }
@@ -98,7 +98,7 @@ const PlaylistDetail = () => {
   if (error) return <ErrorView message={error} onRetry={loadPlaylist} />;
   if (!playlist) return <ErrorView message="Playlist not found" />;
 
-  const totalDuration = playlist.trackDetails?.reduce((sum, track) => sum + track.duration, 0) || 0;
+const totalDuration = playlist.trackDetails?.reduce((sum, track) => sum + (track.duration_c || track.duration), 0) || 0;
   const trackCount = playlist.trackDetails?.length || 0;
 
   return (
@@ -120,8 +120,8 @@ const PlaylistDetail = () => {
         <div className="flex flex-col md:flex-row gap-8 mb-8">
           <div className="flex-shrink-0">
             <img 
-              src={playlist.coverImage} 
-              alt={playlist.name}
+src={playlist.coverImage_c?.url || playlist.coverImage || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center"} 
+              alt={playlist.Name || playlist.name}
               className="w-64 h-64 rounded-2xl object-cover shadow-2xl"
             />
           </div>
@@ -132,11 +132,11 @@ const PlaylistDetail = () => {
                 Playlist
               </p>
               <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-4 break-words">
-                {playlist.name}
+{playlist.Name || playlist.name}
               </h1>
-              {playlist.description && (
+              {(playlist.description_c || playlist.description) && (
                 <p className="text-gray-300 text-lg mb-4 leading-relaxed">
-                  {playlist.description}
+                  {playlist.description_c || playlist.description}
                 </p>
               )}
               

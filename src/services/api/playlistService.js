@@ -1,128 +1,233 @@
-import playlistsData from "@/services/mockData/playlists.json";
-import trackService from "@/services/api/trackService";
-
-// Simulate network delay
-const delay = () => new Promise(resolve => setTimeout(resolve, Math.random() * 300 + 200));
+import { getApperClient } from '@/services/apperClient';
+import { toast } from 'react-toastify';
+import trackService from '@/services/api/trackService';
 
 class PlaylistService {
   constructor() {
-    this.playlists = [...playlistsData];
+    this.tableName = 'playlists_c';
   }
 
   async getAll() {
-    await delay();
-    return [...this.playlists];
+    try {
+      const apperClient = getApperClient();
+      if (!apperClient) {
+        throw new Error('ApperClient not available');
+      }
+
+      const response = await apperClient.fetchRecords(this.tableName, {
+        fields: [
+          {"field": {"Name": "Name"}},
+          {"field": {"Name": "description_c"}},
+          {"field": {"Name": "duration_c"}},
+          {"field": {"Name": "trackIds_c"}},
+          {"field": {"Name": "coverImage_c"}}
+        ]
+      });
+
+      if (!response.success) {
+        console.error('Failed to fetch playlists:', response.message);
+        toast.error(response.message);
+        return [];
+      }
+
+      return response.data || [];
+    } catch (error) {
+      console.error('Error fetching playlists:', error?.response?.data?.message || error.message);
+      toast.error('Failed to fetch playlists');
+      return [];
+    }
   }
 
   async getById(id) {
-    await delay();
-    const playlist = this.playlists.find(playlist => playlist.Id === parseInt(id));
-    if (!playlist) {
-      throw new Error(`Playlist with ID ${id} not found`);
+    try {
+      const apperClient = getApperClient();
+      if (!apperClient) {
+        throw new Error('ApperClient not available');
+      }
+
+      const response = await apperClient.getRecordById(this.tableName, parseInt(id), {
+        fields: [
+          {"field": {"Name": "Name"}},
+          {"field": {"Name": "description_c"}},
+          {"field": {"Name": "duration_c"}},
+          {"field": {"Name": "trackIds_c"}},
+          {"field": {"Name": "coverImage_c"}}
+        ]
+      });
+
+      if (!response.success) {
+        console.error('Failed to fetch playlist:', response.message);
+        toast.error(response.message);
+        return null;
+      }
+
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching playlist ${id}:`, error?.response?.data?.message || error.message);
+      toast.error('Failed to fetch playlist');
+      return null;
     }
-    return { ...playlist };
   }
 
   async getWithTracks(id) {
-    await delay();
-    const playlist = await this.getById(id);
-    const tracks = await trackService.getByIds(playlist.tracks);
-    return {
-      ...playlist,
-      trackDetails: tracks
-    };
+    try {
+      const playlist = await this.getById(id);
+      if (!playlist) return null;
+
+      // For now, return empty tracks array since trackIds_c is a number field
+      // In a real implementation, this would need proper track relationship handling
+      return {
+        ...playlist,
+        trackDetails: []
+      };
+    } catch (error) {
+      console.error(`Error fetching playlist with tracks ${id}:`, error?.response?.data?.message || error.message);
+      toast.error('Failed to fetch playlist with tracks');
+      return null;
+    }
   }
 
   async create(playlistData) {
-    await delay();
-    const maxId = Math.max(...this.playlists.map(p => p.Id), 0);
-    const newPlaylist = {
-      Id: maxId + 1,
-      name: playlistData.name || "New Playlist",
-      description: playlistData.description || "",
-      coverImage: playlistData.coverImage || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center",
-      tracks: [],
-      createdAt: new Date().toISOString(),
-      duration: 0
-    };
-    
-    this.playlists.push(newPlaylist);
-    return { ...newPlaylist };
+    try {
+      const apperClient = getApperClient();
+      if (!apperClient) {
+        throw new Error('ApperClient not available');
+      }
+
+      const response = await apperClient.createRecord(this.tableName, {
+        records: [{
+          Name: playlistData.name || "New Playlist",
+          description_c: playlistData.description || "",
+          duration_c: 0,
+          trackIds_c: 0
+        }]
+      });
+
+      if (!response.success) {
+        console.error('Failed to create playlist:', response.message);
+        toast.error(response.message);
+        throw new Error(response.message);
+      }
+
+      if (response.results) {
+        const failed = response.results.filter(r => !r.success);
+        if (failed.length > 0) {
+          console.error(`Failed to create playlist:`, failed);
+          failed.forEach(record => {
+            if (record.message) toast.error(record.message);
+          });
+          throw new Error('Failed to create playlist');
+        }
+
+        return response.results[0].data;
+      }
+
+      throw new Error('No response data');
+    } catch (error) {
+      console.error('Error creating playlist:', error?.response?.data?.message || error.message);
+      toast.error('Failed to create playlist');
+      throw error;
+    }
   }
 
   async update(id, playlistData) {
-    await delay();
-    const playlistIndex = this.playlists.findIndex(playlist => playlist.Id === parseInt(id));
-    if (playlistIndex === -1) {
-      throw new Error(`Playlist with ID ${id} not found`);
+    try {
+      const apperClient = getApperClient();
+      if (!apperClient) {
+        throw new Error('ApperClient not available');
+      }
+
+      const updateData = {};
+      if (playlistData.name) updateData.Name = playlistData.name;
+      if (playlistData.description !== undefined) updateData.description_c = playlistData.description;
+      if (playlistData.duration !== undefined) updateData.duration_c = playlistData.duration;
+
+      const response = await apperClient.updateRecord(this.tableName, {
+        records: [{
+          Id: parseInt(id),
+          ...updateData
+        }]
+      });
+
+      if (!response.success) {
+        console.error('Failed to update playlist:', response.message);
+        toast.error(response.message);
+        throw new Error(response.message);
+      }
+
+      if (response.results) {
+        const failed = response.results.filter(r => !r.success);
+        if (failed.length > 0) {
+          console.error(`Failed to update playlist ${id}:`, failed);
+          failed.forEach(record => {
+            if (record.message) toast.error(record.message);
+          });
+          throw new Error('Failed to update playlist');
+        }
+
+        return response.results[0].data;
+      }
+
+      throw new Error('No response data');
+    } catch (error) {
+      console.error('Error updating playlist:', error?.response?.data?.message || error.message);
+      toast.error('Failed to update playlist');
+      throw error;
     }
-
-    this.playlists[playlistIndex] = {
-      ...this.playlists[playlistIndex],
-      ...playlistData
-    };
-
-    return { ...this.playlists[playlistIndex] };
   }
 
   async delete(id) {
-    await delay();
-    const playlistIndex = this.playlists.findIndex(playlist => playlist.Id === parseInt(id));
-    if (playlistIndex === -1) {
-      throw new Error(`Playlist with ID ${id} not found`);
-    }
+    try {
+      const apperClient = getApperClient();
+      if (!apperClient) {
+        throw new Error('ApperClient not available');
+      }
 
-    const deletedPlaylist = { ...this.playlists[playlistIndex] };
-    this.playlists.splice(playlistIndex, 1);
-    return deletedPlaylist;
+      const response = await apperClient.deleteRecord(this.tableName, {
+        RecordIds: [parseInt(id)]
+      });
+
+      if (!response.success) {
+        console.error('Failed to delete playlist:', response.message);
+        toast.error(response.message);
+        throw new Error(response.message);
+      }
+
+      if (response.results) {
+        const failed = response.results.filter(r => !r.success);
+        if (failed.length > 0) {
+          console.error(`Failed to delete playlist ${id}:`, failed);
+          failed.forEach(record => {
+            if (record.message) toast.error(record.message);
+          });
+          throw new Error('Failed to delete playlist');
+        }
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error deleting playlist:', error?.response?.data?.message || error.message);
+      toast.error('Failed to delete playlist');
+      throw error;
+    }
   }
 
   async addTrack(playlistId, trackId) {
-    await delay();
-    const playlist = this.playlists.find(p => p.Id === parseInt(playlistId));
-    if (!playlist) {
-      throw new Error(`Playlist with ID ${playlistId} not found`);
-    }
-
-    if (!playlist.tracks.includes(parseInt(trackId))) {
-      playlist.tracks.push(parseInt(trackId));
-      
-      // Update duration
-      const track = await trackService.getById(trackId);
-      playlist.duration += track.duration;
-    }
-
-    return { ...playlist };
+    // This would need proper implementation with track relationship handling
+    toast.info("Add track functionality needs proper track relationship implementation");
+    return null;
   }
 
   async removeTrack(playlistId, trackId) {
-    await delay();
-    const playlist = this.playlists.find(p => p.Id === parseInt(playlistId));
-    if (!playlist) {
-      throw new Error(`Playlist with ID ${playlistId} not found`);
-    }
-
-    const trackIndex = playlist.tracks.indexOf(parseInt(trackId));
-    if (trackIndex > -1) {
-      playlist.tracks.splice(trackIndex, 1);
-      
-      // Update duration
-      const track = await trackService.getById(trackId);
-      playlist.duration -= track.duration;
-    }
-
-    return { ...playlist };
+    // This would need proper implementation with track relationship handling  
+    toast.info("Remove track functionality needs proper track relationship implementation");
+    return null;
   }
 
   async reorderTracks(playlistId, trackIds) {
-    await delay();
-    const playlist = this.playlists.find(p => p.Id === parseInt(playlistId));
-    if (!playlist) {
-      throw new Error(`Playlist with ID ${playlistId} not found`);
-    }
-
-    playlist.tracks = trackIds.map(id => parseInt(id));
-    return { ...playlist };
+    // This would need proper implementation with track relationship handling
+    toast.info("Reorder tracks functionality needs proper track relationship implementation");
+    return null;
   }
 
   formatDuration(seconds) {

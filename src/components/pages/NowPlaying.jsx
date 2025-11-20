@@ -102,8 +102,8 @@ const NowPlaying = () => {
           <div className="w-full max-w-md lg:max-w-lg mb-8">
             <div className="relative aspect-square mb-6">
               <img 
-                src={currentTrack.albumArt} 
-                alt={currentTrack.album}
+src={currentTrack.albumArt_c?.url || currentTrack.albumArt || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center"} 
+                alt={currentTrack.album_c || currentTrack.album}
                 className="w-full h-full object-cover rounded-3xl shadow-2xl"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-dark/20 via-transparent to-transparent rounded-3xl" />
@@ -113,13 +113,13 @@ const NowPlaying = () => {
           {/* Track Info */}
           <div className="text-center mb-8 w-full max-w-md">
             <h1 className="text-3xl lg:text-4xl font-display font-bold text-white mb-3 truncate">
-              {currentTrack.title}
+{currentTrack.title_c || currentTrack.title}
             </h1>
-            <p className="text-xl text-gray-300 mb-2 truncate">
-              {currentTrack.artist}
+            <p className="text-gray-400 text-lg mb-2">
+              {currentTrack.artist_c || currentTrack.artist}
             </p>
-            <p className="text-gray-400 truncate">
-              {currentTrack.album}
+            <p className="text-gray-500 text-md">
+              {currentTrack.album_c || currentTrack.album}
             </p>
           </div>
 
@@ -159,7 +159,7 @@ const NowPlaying = () => {
             >
               <ApperIcon 
                 name="Heart" 
-                className={`h-6 w-6 ${currentTrack.isLiked ? "fill-current text-red-400" : ""}`} 
+className={`h-6 w-6 ${(currentTrack.isLiked_c || currentTrack.isLiked) ? "fill-current text-red-400" : ""}`}
               />
             </Button>
 
@@ -203,8 +203,8 @@ const NowPlaying = () => {
             </div>
             
             <div className="space-y-4 text-gray-300 leading-relaxed">
-              {currentTrack.lyrics ? (
-                currentTrack.lyrics.split('\n').map((line, index) => (
+{(currentTrack.lyrics_c || currentTrack.lyrics) ? (
+                (currentTrack.lyrics_c || currentTrack.lyrics).split('\n').map((line, index) => (
                   <p key={index} className="hover:text-white transition-colors cursor-pointer">
                     {line}
                   </p>

@@ -99,7 +99,7 @@ const Library = () => {
           : prev.likedTracks.filter(track => track.Id !== trackId)
       }));
       
-      toast.success(updatedTrack.isLiked ? "Added to Liked Songs" : "Removed from Liked Songs");
+toast.success((updatedTrack.isLiked_c || updatedTrack.isLiked) ? "Added to Liked Songs" : "Removed from Liked Songs");
     } catch (err) {
       toast.error("Failed to update liked status");
     }
